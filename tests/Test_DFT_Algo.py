@@ -1,7 +1,7 @@
 import sys
 import logging
 sys.path.append('C:\\Users\\khanh\\Desktop\\Workspace\\DSP\\')
-from src.FourierAnalysis.DFT_Analyzer import *
+from src.FourierAnalysis.Algorithms import *
 import numpy as np
 from scipy import signal
 import matplotlib.pyplot as plt
@@ -21,6 +21,7 @@ wave = sinWave_1 + sinWave_2
 #plt.plot(wave)
 #plt.show()
 
+wave = [1,2,3,4,5,6,7,8]
 print(wave)
 X = dft(wave)
 for i in range(len(X)):
