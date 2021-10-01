@@ -34,7 +34,7 @@ class Parser:
         # Reading the data and parse them into channels
         wavPtr.setpos(0)
         rawData = wavPtr.readframes(wavPtr.getnframes())
-        dataArr = np.fromstring(rawData, dtype=sampleType)
+        dataArr = np.frombuffer(rawData, dtype=sampleType)
         
         for ith_Channel in range(self.nChannels):
             ch_data = dataArr[ith_Channel::self.nChannels]
@@ -47,15 +47,15 @@ class Parser:
     def visualize(self):
         for ith_Channel in range(self.nChannels):
             plt.plot(self.channelsData[ith_Channel])
-        plt.show(block=False)
+        
 
-    def splitChannels(self):
+    def saveChannels(self):
         for ith_Channel in range(self.nChannels):
             outname = "%s_Channel_%d.wav" % (self.path.removesuffix('.wav'), ith_Channel)
             outwav = wave.open(outname, 'w')
             outwav.setparams(self.wavParams)
             outwav.setnchannels(1)
-            outwav.writeframes(self.channelsData[ith_Channel].tostring())
+            outwav.writeframes(self.channelsData[ith_Channel].tobytes())
             outwav.close()
 
 
