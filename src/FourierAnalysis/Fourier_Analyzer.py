@@ -1,4 +1,4 @@
-#import numpy as np
+import numpy as np
 from src.FourierAnalysis.Algorithms import dft
 
 import matplotlib.pyplot as plt
@@ -18,31 +18,35 @@ class Fourier_Analyzer:
         self._calcSpektrum, self._calcFreq = dft(self._samples, self._fs)
         pass
 
-    def plot(self):
-        fig, (axTime, axSpectrum) = plt.subplots(2)
 
+
+    # Visualization
+    def plotSignal(self, axSignal):
         # Plot Time Domain
-        axTime.set_title('Time Domain')
-        axTime.plot(self._samples)
-        axTime.set(xlabel="Time", ylabel="Amplitude")
-        
-        # Plot Spectrum
-        self.plotSpectrum(axSpectrum, False)
-
-        # Show the figures
-        plt.show()
-
+        axSignal.set_title('Time Domain')
+        axSignal.plot(self._samples)
+        axSignal.set(xlabel="Time", ylabel="Amplitude")
         # TODO: beautify the figure
         #
         #
-        return fig, axTime, axSpectrum
+        return axSignal
 
-    def plotSpectrum(self, ax, showFlag = True):
-        ax.set_title('Frequency Spectrum')
-        ax.stem(self._calcFreq, abs(self._calcSpektrum))
-        ax.set(xlabel="Frequency [Hz]", ylabel="Magtitude")
-        plt.show(block = showFlag)
-        return ax
+    def plotSpectrum(self, axMag, axPhase):
+        axMag.set_title("Spectrum")
+        axMag.stem(self._calcFreq, np.abs(self._calcSpektrum))
+        axMag.set(xlabel="Frequency [Hz]", ylabel="Magtitude")
 
+        axPhase.set_title("Phase")
+        axPhase.stem(self._calcFreq, np.angle(self._calcSpektrum, deg=True))
+        axPhase.set(xlabel="Frequency [Hz]", ylabel="Phase")
+        return axMag, axPhase
 
+    def filter():
 
+        
+        pass
+
+    @staticmethod
+    def reconstruct():
+        
+        pass

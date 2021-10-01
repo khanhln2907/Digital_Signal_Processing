@@ -41,8 +41,6 @@ class Parser:
             self.channelsData.append(ch_data)
 
         wavPtr.close()
-        # self.waveValues = array.array()
-        # self.waveValues.fromfile(open(filePath, 'rb'), int(os.path.getsize(filePath)/self.waveValues.itemsize))
         
     def visualize(self):
         for ith_Channel in range(self.nChannels):

@@ -21,8 +21,11 @@ wave = sinWave_1 + sinWave_2
 #plt.plot(wave)
 #plt.show()
 
-wave = [1,2,3,4,5,6,7,8]
 print(wave)
-X = dft(wave)
+X, freq = dft(wave)
 for i in range(len(X)):
     print(X[i])
+
+calc_x = idft(X)
+for i in range(len(calc_x)):
+    print(calc_x[i])
