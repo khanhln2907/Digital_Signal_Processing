@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 class Fourier_Analyzer:
     _fs = 0
     _samples = []
+    _timeAxis = []
 
     _calcSpektrum = []
     _calcFreq = []
@@ -13,6 +14,8 @@ class Fourier_Analyzer:
     def __init__(self, fs, dataSamples) -> None:
         self._fs = fs
         self._samples = dataSamples
+        timestep = 1/fs
+        self._timeAxis = np.arange(0, len(dataSamples)) * timestep
 
         # Compute the spectrum
         self._calcSpektrum, self._calcFreq = dft(self._samples, self._fs)
@@ -24,7 +27,7 @@ class Fourier_Analyzer:
     def plotSignal(self, axSignal):
         # Plot Time Domain
         axSignal.set_title('Time Domain')
-        axSignal.plot(self._samples)
+        axSignal.plot(self._timeAxis, self._samples)
         axSignal.set(xlabel="Time", ylabel="Amplitude")
         # TODO: beautify the figure
         #
