@@ -8,7 +8,7 @@ from scipy import signal
 import matplotlib.pyplot as plt
 
 
-fs = 256
+fs = 100
 ts = 1/fs
 
 sin1 = SinusoidSignal(amplitude = 10, freq = 5, nSamples = fs)
