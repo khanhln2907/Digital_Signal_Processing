@@ -14,10 +14,9 @@ class Fourier_Analyzer:
     def __init__(self, fs, dataSamples) -> None:
         self._fs = fs
         self._samples = dataSamples
-        timestep = 1/fs
-        self._timeAxis = np.arange(0, len(dataSamples)) * timestep
 
         # Compute the spectrum
+        self._timeAxis = np.arange(0, len(dataSamples)) /fs
         self._calcSpektrum, self._calcFreq = dft(self._samples, self._fs)
         pass
 
