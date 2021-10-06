@@ -1,7 +1,7 @@
 from matplotlib.pyplot import cool
 import numpy as np
 
-def roundComplex(x_comp, tol = 1e-15):
+def roundComplex(x_comp, tol = 1e-12):
     # TODO: numply does now allow changing these values. How to set them properly?
     # Workaround...
     ret = np.zeros(1, dtype=complex)
@@ -58,12 +58,12 @@ def fft(samples_1d):
     coeff_dict = __generateFFTCoeff(n_points)
 
     # Determine the type of FFT
-    nFFT = n_points
+    nFFT = 2
     # Create the fft layers
     fftNet = []
-    while(nFFT != 1):
+    while(nFFT <= n_points):
         fftNet.append(fftLayer(coeff_dict[nFFT], n_points))
-        nFFT //= 2
+        nFFT = nFFT * 2
 
     # Input bit scrambling
     mappedIndex = bitScrambling(n_points)
@@ -139,6 +139,7 @@ class fftBlock:
         nInput = len(input)
         assert (nInput == self.nFFT), "FFTBlock input dimension mismatch"
         outputLayer = np.zeros(nInput, dtype = complex) 
+
         for k in np.arange(self.nFFT//2):
             i_xk = input[k]
             i_yk = input[k + self.nFFT//2]
@@ -151,6 +152,7 @@ class fftLayer:
     coeff = []
     fftBlockArr =[]
     nFFT = 2
+    mappedIndex = []
     def __init__(self, coeff, Npoints) -> None:
         self.coeff = coeff
         self.nFFT = len(coeff)
@@ -158,6 +160,9 @@ class fftLayer:
         assert_Power_2(Npoints)
         nBlocks = Npoints // self.nFFT
 
+        self.mappedIndex = bitScrambling(self.nFFT)
+
+        # Create the n-point fft blocks
         self.fftBlockArr = []
         for i in range(Npoints // self.nFFT):
             self.fftBlockArr.append(fftBlock(coeff))
@@ -169,15 +174,18 @@ class fftLayer:
 
 
     def execute(self, input):
+        #print(input)
         # Get the total amount of the input samples
         nInput = len(input)
         assert_Power_2(nInput)
         o_Layer = np.zeros(nInput, dtype=complex)
         for block, i in zip(self.fftBlockArr, range(len(self.fftBlockArr))):
             batchPtr = self.nFFT*i
-            i_x = [input[i] for i in range(batchPtr, batchPtr+self.nFFT)]  
-            o_Block = block.compute(i_x)
-            o_Layer[batchPtr:batchPtr+self.nFFT] = o_Block[:]
+            # Get the input for each block
+            i_batch = [input[i] for i in range(batchPtr, batchPtr+self.nFFT)]
+            # Shuffle the input for this layer
+            o_Block = block.compute(i_batch)
+            o_Layer[batchPtr:batchPtr+self.nFFT] = [roundComplex(ret) for ret in o_Block]
         return o_Layer
 
 
