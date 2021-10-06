@@ -5,6 +5,7 @@ from src.FourierAnalysis.Fourier_Analyzer import Fourier_Analyzer
 import numpy as np
 from scipy import signal
 import matplotlib.pyplot as plt
+from src.FourierAnalysis.Algorithms import fft
 
 fSig_1 = 1000
 fSig_2 = 2000
@@ -20,7 +21,13 @@ wave = sinWave_1 + sinWave_2
 
 
 analyzer = Fourier_Analyzer(fs, wave)
-fig, (axSignal, axMag, axPhase) = plt.subplots(3)
-analyzer.plotSignal(axSignal)
-analyzer.plotSpectrum(axMag, axPhase)
-plt.show()
+
+print("DFT")
+print(analyzer._calcSpektrum)
+print("FFT")
+print(fft(wave))
+
+#fig, (axSignal, axMag, axPhase) = plt.subplots(3)
+#analyzer.plotSignal(axSignal)
+#analyzer.plotSpectrum(axMag, axPhase)
+#plt.show()

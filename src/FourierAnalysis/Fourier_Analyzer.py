@@ -20,7 +20,7 @@ class Fourier_Analyzer:
         self._calcSpektrum, self._calcFreq = dft(self._samples, self._fs)
         pass
 
-
+        
 
     # Visualization
     def plotSignal(self, axSignal):

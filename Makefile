@@ -8,3 +8,5 @@ test:
 debug:
 	python .\tests\Test_Fourier_Analyzer.py
 
+test2:
+	python .\src\FourierAnalysis\Algorithms.py

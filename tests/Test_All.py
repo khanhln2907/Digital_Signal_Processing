@@ -8,14 +8,15 @@ from scipy import signal
 import matplotlib.pyplot as plt
 
 
-fs = 100
-ts = 1/fs
+fs = 8000
 
-sin1 = SinusoidSignal(amplitude = 10, freq = 5, nSamples = fs)
-sin2 = SinusoidSignal(amplitude = 20, freq = 10, nSamples = fs)
+sin1 = SinusoidSignal(amplitude = 10, freq = 1000, nSamples = fs)
+sin2 = SinusoidSignal(amplitude = 20, freq = 2000, nSamples = fs)
 
 testwave = sin1 + sin2
-analyzer = Fourier_Analyzer(fs, testwave.getSamples())
+samplePoints = testwave.getSamples()
+
+analyzer = Fourier_Analyzer(fs, samplePoints[1:9])
 
 fig, (axTime, axMag, axPhase) =  plt.subplots(3)
 analyzer.plotSignal(axTime)
