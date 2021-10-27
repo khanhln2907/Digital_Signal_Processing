@@ -5,8 +5,10 @@ from src.FourierAnalysis.Fourier_Analyzer import Fourier_Analyzer
 import numpy as np
 from scipy import signal
 import matplotlib.pyplot as plt
-from src.FourierAnalysis.Algorithms import fft
+from src.FourierAnalysis.Algorithms import fft as myfft
 import time
+from scipy.fft import fft
+
 
 fSig_1 = 1000
 fSig_2 = 2000
@@ -17,7 +19,7 @@ def millis():
     return round(time.time() * 1000)
 
 #n = np.linspace(0, 1, fs, endpoint=False)
-n = np.array(range(0,8))
+n = np.array(range(0,2048))
 sinWave_1 = np.sin(2*np.pi*fSig_1*n*ts)
 sinWave_2 =  0.5*np.sin(2*np.pi*fSig_2*n*ts + 3*np.pi/4)
 
@@ -25,22 +27,27 @@ wave = sinWave_1 + sinWave_2
 
 
 ticDFT = millis()
-analyzer = Fourier_Analyzer(fs, wave)
+#analyzer = Fourier_Analyzer(fs, wave)
 tocDFF = millis() - ticDFT
-retDFT = analyzer._calcSpektrum
+retDFT = 0 #analyzer._calcSpektrum
 
 ticFFT = millis()
 retFFT = fft(wave)
 tocFFT = millis() - ticFFT
 
+ticmyFFT = millis()
+retmyFFT = myfft(wave)
+tocmyFFT = millis() - ticmyFFT
+
 print("Execution Time evaluation")
 print("FFT. Time Exc: %d" % (tocFFT))
-print("DFT. Time Exc: %d" % (tocDFF))
+print("MyFFT. Time Exc: %d" % (tocmyFFT))
+#print("DFT. Time Exc: %d" % (tocDFF))
 
 print("Result Evaluation. Matched?")
 #print(retDFT)
 #print(retFFT)
-print(np.allclose(retDFT, retFFT))
+print(np.allclose(retmyFFT, retFFT))
 #np.array_equal ()
 
 

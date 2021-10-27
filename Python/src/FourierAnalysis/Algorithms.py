@@ -1,6 +1,6 @@
-from matplotlib.pyplot import cool
 import numpy as np
-
+from src.Tools.ElapsedTimer.ElapsedTimer import *
+ 
 def roundComplex(x_comp, tol = 1e-12):
     # TODO: numply does now allow changing these values. How to set them properly?
     # Workaround...
@@ -54,6 +54,7 @@ def fft(samples_1d):
     """
     Fast Fourier Transform
     """
+
     n_points = len(samples_1d)
     coeff_dict = __generateFFTCoeff(n_points)
 
@@ -68,7 +69,7 @@ def fft(samples_1d):
     # Input bit scrambling
     mappedIndex = bitScrambling(n_points)
     rev_Sam = [samples_1d[i] for i in mappedIndex] 
-
+    
     # Compute the output for each layer iteratively
     out = rev_Sam
     for layer in fftNet:
@@ -84,8 +85,8 @@ def __generateFFTCoeff(N_points):
         coeef = np.zeros(_N, dtype=complex)
         for m in range(_N):
             phase = 2 * np.pi * m / _N
-            raw_result = (np.cos(phase) - np.sin(phase) * 1j)
-            coeef[m] = roundComplex(raw_result)
+            coeef[m] = (np.cos(phase) - np.sin(phase) * 1j)
+            #coeef[m] = raw_result #roundComplex(raw_result)
         # Update look-up table
         ret[_N] = coeef
         # Update counter variables
@@ -182,10 +183,10 @@ class fftLayer:
         for block, i in zip(self.fftBlockArr, range(len(self.fftBlockArr))):
             batchPtr = self.nFFT*i
             # Get the input for each block
-            i_batch = [input[i] for i in range(batchPtr, batchPtr+self.nFFT)]
+            #i_batch = [input[i] for i in range(batchPtr, batchPtr+self.nFFT)]
             # Shuffle the input for this layer
-            o_Block = block.compute(i_batch)
-            o_Layer[batchPtr:batchPtr+self.nFFT] = [roundComplex(ret) for ret in o_Block]
+            o_Layer[batchPtr:batchPtr+self.nFFT] = block.compute(input[batchPtr:batchPtr+self.nFFT])
+            #o_Layer[batchPtr:batchPtr+self.nFFT] = o_Block #[roundComplex(ret) for ret in o_Block]
         return o_Layer
 
 

@@ -1,6 +1,6 @@
 import numpy as np
-from src.FourierAnalysis.Algorithms import dft
-
+#from src.FourierAnalysis.Algorithms import dft
+from scipy.fft import fft, fftshift
 import matplotlib.pyplot as plt
 
 class Fourier_Analyzer:
@@ -17,7 +17,12 @@ class Fourier_Analyzer:
 
         # Compute the spectrum
         self._timeAxis = np.arange(0, len(dataSamples)) /fs
-        self._calcSpektrum, self._calcFreq = dft(self._samples, self._fs)
+        self._calcSpektrum = fft(self._samples)
+
+        N_points = len(dataSamples)
+        self._calcFreq = []
+        for m in range(N_points):
+            self._calcFreq.append(m * fs / N_points)
         pass
 
         
@@ -35,7 +40,7 @@ class Fourier_Analyzer:
 
     def plotSpectrum(self, axMag, axPhase):
         axMag.set_title("Spectrum")
-        axMag.stem(self._calcFreq, np.abs(self._calcSpektrum))
+        axMag.stem(self._calcFreq, fftshift(np.abs(self._calcSpektrum)))
         axMag.set(xlabel="Frequency [Hz]", ylabel="Magtitude")
 
         axPhase.set_title("Phase")
